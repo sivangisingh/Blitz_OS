@@ -15,6 +15,12 @@ header Synch
 
   class Mutex
     superclass Object
+<<<<<<< HEAD
+=======
+    fields
+      isHeldBy: ptr to Thread
+      mutex_waiting_threads: List [Thread]
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
     methods
       Init ()
       Lock ()

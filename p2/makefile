@@ -42,7 +42,10 @@ Main.s: Main.h Main.c Thread.h List.h System.h Synch.h
 Main.o: Main.s
 	asm Main.s
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
 os: System.o List.o Thread.o Switch.o Synch.o Main.o Runtime.o
 	lddd System.o List.o Thread.o Switch.o Synch.o Main.o Runtime.o -o os

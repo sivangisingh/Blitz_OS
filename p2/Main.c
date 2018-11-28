@@ -2,7 +2,10 @@ code Main
 
   -- OS Class: Project 2
   --
+<<<<<<< HEAD
   -- <PUT YOUR NAME HERE>
+=======
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
   --
   -- This package contains the following:
   --     SimpleThreadExample
@@ -22,11 +25,19 @@ code Main
 
       -----  Uncomment any one of the following to perform the desired test  -----
 
+<<<<<<< HEAD
       SimpleThreadExample ()
       -- MoreThreadExamples ()
       -- TestMutex ()
       -- ProducerConsumer ()
       -- DiningPhilosophers ()
+=======
+      -- SimpleThreadExample ()
+      -- MoreThreadExamples ()
+      -- TestMutex ()
+       --ProducerConsumer ()
+      DiningPhilosophers ()
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
 
       ThreadFinish ()
 
@@ -310,6 +321,7 @@ code Main
     bufferNextIn: int = 0
     bufferNextOut: int = 0
     thArray: array [8] of Thread = new array of Thread { 8 of new Thread }
+<<<<<<< HEAD
 
   function ProducerConsumer ()
 
@@ -340,6 +352,46 @@ code Main
       thArray[7].Fork (Producer, 5)
 
       ThreadFinish ()
+=======
+    mutex_PC : Mutex = new Mutex 
+    sema_full : Semaphore = new Semaphore
+    sema_empty : Semaphore = new Semaphore
+
+
+
+  function ProducerConsumer ()
+        sema_empty.Init(5)
+        sema_full.Init(0)
+        mutex_PC.Init()
+      print ("     ")
+
+      thArray[0].Init ("Consumer-1| ")
+      thArray[0].Fork (Consumer, 1)
+
+      thArray[1].Init ("Consumer-2| ")
+      thArray[1].Fork (Consumer, 2)
+
+      thArray[2].Init ("Consumer-3| ")
+      thArray[2].Fork (Consumer, 3)
+
+      thArray[3].Init ("Producer-A ")
+      thArray[3].Fork (Producer, 1)
+
+      thArray[4].Init ("Producer-B ")
+      thArray[4].Fork (Producer, 2)
+
+      thArray[5].Init ("Producer-C ")
+      thArray[5].Fork (Producer, 3)
+
+      thArray[6].Init ("Producer-D ")
+      thArray[6].Fork (Producer, 4)
+
+      thArray[7].Init ("Producer-E ")
+      thArray[7].Fork (Producer, 5)
+
+      ThreadFinish ()
+
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
     endFunction
 
   function Producer (myId: int)
@@ -348,6 +400,11 @@ code Main
         c: char = intToChar ('A' + myId - 1)
       for i = 1 to 5
         -- Perform synchroniztion...
+<<<<<<< HEAD
+=======
+        sema_empty.Down()
+        mutex_PC.Lock()
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
 
         -- Add c to the buffer
         buffer [bufferNextIn] = c
@@ -359,6 +416,11 @@ code Main
 
         -- Perform synchronization...
 
+<<<<<<< HEAD
+=======
+        mutex_PC.Unlock()
+        sema_full.Up()
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
       endFor
     endFunction
 
@@ -367,6 +429,11 @@ code Main
         c: char
       while true
         -- Perform synchroniztion...
+<<<<<<< HEAD
+=======
+        sema_full.Down()
+        mutex_PC.Lock()
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
 
         -- Remove next character from the buffer
         c = buffer [bufferNextOut]
@@ -377,7 +444,12 @@ code Main
         PrintBuffer (c)
 
         -- Perform synchronization...
+<<<<<<< HEAD
 
+=======
+        mutex_PC.Unlock()
+        sema_empty.Up()
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
       endWhile
     endFunction
 
@@ -456,10 +528,17 @@ code Main
   function DiningPhilosophers ()
 
       print ("Plato\n")
+<<<<<<< HEAD
       print ("    Sartre\n")
       print ("        Kant\n")
       print ("            Nietzsche\n")
       print ("                Aristotle\n")
+=======
+      print ("   Sartre\n")
+      print ("      Kant\n")
+      print ("         Nietzsche\n")
+      print ("            Aristotle\n")
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
 
       mon = new ForkMonitor
       mon.Init ()
@@ -488,6 +567,11 @@ code Main
     -- put down his forks.
       var
         i: int
+<<<<<<< HEAD
+=======
+        x: int
+      x = 1
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
       for i = 1 to 7
         -- Now he is thinking
         mon. PickupForks (p)
@@ -496,6 +580,7 @@ code Main
       endFor
     endFunction
 
+<<<<<<< HEAD
   class ForkMonitor
     superclass Object
     fields
@@ -505,11 +590,27 @@ code Main
       PickupForks (p: int)
       PutDownForks (p: int)
       PrintAllStatus ()
+=======
+  class ForkMonitor 
+    superclass Object
+    fields
+      status: array [5] of int             -- For each philosopher: HUNGRY, EATING, or THINKING
+      mon_mutex: Mutex 
+      cond_var: array[5] of Condition
+    methods
+      Init ()
+      Test (p: int)
+      PickupForks (p: int)
+      PutDownForks (p: int)
+      PrintAllStatus ()
+      
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
   endClass
 
   behavior ForkMonitor
 
     method Init ()
+<<<<<<< HEAD
       -- Initialize so that all philosophers are THINKING.
       -- ...unimplemented...
       endMethod
@@ -522,6 +623,44 @@ code Main
     method PutDownForks (p: int)
       -- This method is called when the philosopher 'p' is done eating.
       -- ...unimplemented...
+=======
+      var p:int  
+      cond_var = new array of Condition {5 of new Condition}
+      status = new array of int {5 of THINKING}
+      for p = 0 to 4
+        cond_var[p].Init ()
+      endFor
+      mon_mutex = new Mutex
+      mon_mutex.Init ()
+    endMethod
+
+    method Test (p: int)
+      if status[p]==HUNGRY && status[(p+4)%5] != EATING && status[(p+1)%5] != EATING 
+        status[p] = EATING
+        self.PrintAllStatus ()
+        cond_var[p].Signal(&mon_mutex)
+      endIf
+      endMethod
+
+    method PickupForks (p: int)
+     mon_mutex.Lock ()
+     status[p] = HUNGRY
+     self.PrintAllStatus ()
+     self.Test(p)
+     if status[p] != EATING
+      cond_var[p].Wait(&mon_mutex)
+     endIf
+     mon_mutex.Unlock ()
+     endMethod
+
+    method PutDownForks (p: int)
+      mon_mutex.Lock ()
+      status[p]=THINKING
+      self.PrintAllStatus ()
+      self.Test((p+4)%5)
+      self.Test((p+1)%5)
+      mon_mutex.Unlock ()
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
       endMethod
 
     method PrintAllStatus ()

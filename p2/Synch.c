@@ -95,27 +95,77 @@ code Synch
       ----------  Mutex . Init  ----------
 
       method Init ()
+<<<<<<< HEAD
           FatalError ("Unimplemented method")
         endMethod
+=======
+          isHeldBy = null
+          mutex_waiting_threads = new List [Thread]
+      endMethod
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
 
       ----------  Mutex . Lock  ----------
 
       method Lock ()
+<<<<<<< HEAD
           FatalError ("Unimplemented method")
+=======
+          ----------changed
+          var
+            oldIntStat: int
+          oldIntStat = SetInterruptsTo (DISABLED)
+          while( isHeldBy != currentThread )
+            if isHeldBy == null
+              isHeldBy = currentThread 
+            else
+              mutex_waiting_threads.AddToEnd (currentThread)
+              currentThread.Sleep ()
+            endIf
+          endWhile
+          oldIntStat = SetInterruptsTo (oldIntStat)
+          -------------end-change
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
         endMethod
 
       ----------  Mutex . Unlock  ----------
 
       method Unlock ()
+<<<<<<< HEAD
           FatalError ("Unimplemented method")
+=======
+          ----------changed---------------------------------
+          var
+            oldIntStat: int
+            t: ptr to Thread
+          oldIntStat = SetInterruptsTo (DISABLED)
+          if isHeldBy != currentThread
+            FatalError ("Current thread does not hold the mutex")
+          endIf 
+          isHeldBy = null
+          if mutex_waiting_threads.IsEmpty()==false
+            t = mutex_waiting_threads.Remove ()
+            t.status = READY
+            readyList.AddToEnd(t)
+          endIf
+          oldIntStat = SetInterruptsTo (oldIntStat)
+          -------------end-change--------------------------
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
         endMethod
 
       ----------  Mutex . IsHeldByCurrentThread  ----------
 
       method IsHeldByCurrentThread () returns bool
+<<<<<<< HEAD
           FatalError ("Unimplemented method")
           return false
         endMethod
+=======
+        if isHeldBy == currentThread
+          return true
+        endIf
+        return false
+       endMethod
+>>>>>>> cb767a1b2e6659425488baeaf223a0aba7d9dced
 
   endBehavior
 
