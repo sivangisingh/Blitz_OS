@@ -23,8 +23,8 @@ code Main
 
       -- SimpleThreadExample ()
       -- MoreThreadExamples ()
-      -- TestMutex ()
-       --ProducerConsumer ()
+      --TestMutex ()
+      --ProducerConsumer ()
       DiningPhilosophers ()
 
       ThreadFinish ()
@@ -557,7 +557,7 @@ code Main
       cond_var[p].Wait(&mon_mutex)
      endIf
      mon_mutex.Unlock ()
-     endMethod
+    endMethod
 
     method PutDownForks (p: int)
       mon_mutex.Lock ()
@@ -566,7 +566,7 @@ code Main
       self.Test((p+4)%5)
       self.Test((p+1)%5)
       mon_mutex.Unlock ()
-      endMethod
+    endMethod
 
     method PrintAllStatus ()
       -- Print a single line showing the status of all philosophers.

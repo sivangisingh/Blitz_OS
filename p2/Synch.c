@@ -24,7 +24,7 @@ code Synch
     --         Up().  If initialized with i, then it is as if i Up()
     --         operations have been performed already.
     --
-    -- NOTE: The user should never look at a semaphore's count since the value
+    -- NOTE: The user should never look at a semaphores count since the value
     -- retrieved may be out-of-date, due to other threads performing Up() or
     -- Down() operations since the retrieval of the count.
 
@@ -105,15 +105,16 @@ code Synch
           ----------changed
           var
             oldIntStat: int
+          if( isHeldBy == currentThread )
+            FatalError("Current thread Doesn't hold Current Thread")
+          endIf  
           oldIntStat = SetInterruptsTo (DISABLED)
-          while( isHeldBy != currentThread )
-            if isHeldBy == null
+          if isHeldBy == null
               isHeldBy = currentThread 
-            else
+          else
               mutex_waiting_threads.AddToEnd (currentThread)
               currentThread.Sleep ()
-            endIf
-          endWhile
+          endIf
           oldIntStat = SetInterruptsTo (oldIntStat)
           -------------end-change
         endMethod
@@ -134,6 +135,7 @@ code Synch
             t = mutex_waiting_threads.Remove ()
             t.status = READY
             readyList.AddToEnd(t)
+            isHeldBy=t
           endIf
           oldIntStat = SetInterruptsTo (oldIntStat)
           -------------end-change--------------------------
