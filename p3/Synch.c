@@ -24,7 +24,7 @@ code Synch
     --         Up().  If initialized with i, then it is as if i Up()
     --         operations have been performed already.
     --
-    -- NOTE: The user should never look at a semaphore's count since the value
+    -- NOTE: The user should never look at a semaphores count since the value
     -- retrieved may be out-of-date, due to other threads performing Up() or
     -- Down() operations since the retrieval of the count.
 
@@ -49,6 +49,7 @@ code Synch
             FatalError ("Semaphore count overflowed during 'Up' operation")
           endIf
           count = count + 1
+          printInt(count)
           if count <= 0
             t = waitingThreads.Remove ()
             t.status = READY
@@ -67,6 +68,7 @@ code Synch
             FatalError ("Semaphore count underflowed during 'Down' operation")
           endIf
           count = count - 1
+          printInt(count)
           if count < 0
             waitingThreads.AddToEnd (currentThread)
             currentThread.Sleep ()

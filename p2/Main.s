@@ -20973,9 +20973,9 @@ _Label_769:
 	call	_P_Thread_InitializeScheduler
 ! CALL STATEMENT...
 !   Call the function
-	mov	28,r13		! source line 28
+	mov	26,r13		! source line 26
 	mov	"\0\0CA",r10
-	call	_function_46_DiningPhilosophers
+	call	_function_52_TestMutex
 ! CALL STATEMENT...
 !   Call the function
 	mov	30,r13		! source line 30
